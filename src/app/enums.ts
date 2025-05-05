@@ -1,4 +1,4 @@
-export enum BusStatusLabel {
+export enum BusStatusLabelold {
   PAST = 'past',
   ON_TIME = 'on-time',
   EARLY = 'early',

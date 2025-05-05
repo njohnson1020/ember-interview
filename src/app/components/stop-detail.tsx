@@ -1,4 +1,3 @@
-import { RouteStop } from '@/app/lib/transform-trip-info';
 import { TimeDisplay } from './time-display';
 
 export const StopDetail = ({

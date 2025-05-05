@@ -78,3 +78,31 @@ interface RouteDescription {
   is_cancelled: boolean;
   route_id: number;
 }
+
+type BusStatusLabel = 'past' | 'on-time' | 'early' | 'delayed' | 'unknown';
+
+interface TripData {
+  title: string;
+  is_cancelled: boolean;
+  vehicle: Vehicle;
+  stops: RouteStop[];
+  path: GeoPoint[];
+}
+
+interface BusStatus {
+  status: BusStatusLabel;
+  description: string;
+  color: string;
+}
+
+interface RouteStop {
+  stopNumber: number;
+  name: string;
+  location: GeoPoint;
+  arrival: ScheduledTime;
+  departure: ScheduledTime;
+  busStatus: BusStatus;
+  allow_boarding: boolean;
+  allow_drop_off: boolean;
+  is_next_stop: boolean;
+}

@@ -1,22 +1,19 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { RouteStop, TripData } from '@/app/lib/transform-trip-info';
-import { formatTime, getTimeDifferenceInMinutes, now } from '@/app/utils/date';
+import {
+  formatTime,
+  getTimeDifferenceInMinutes,
+  now,
+} from '@/app/utils/date-utils';
 import { useGoogleMaps } from '@/app/hooks/google-maps-hook';
 import { RouteInfo } from './route-info';
 import { StopDetail } from './stop-detail';
+import { calculateBounds, createMarker } from '@/app/utils/map-utils';
 
 interface BusRouteMapProps {
   tripData: TripData;
   googleMapsApiKey: string;
-}
-
-interface MarkerConfig {
-  position: google.maps.LatLngLiteral;
-  title: string;
-  content: HTMLElement;
-  onClick?: () => void;
 }
 
 export const BusRouteMap = ({
@@ -31,7 +28,7 @@ export const BusRouteMap = ({
 
   useEffect(() => {
     if (!mapsLoaded || !tripData.stops.length) return;
-    const bounds = calculateBounds();
+    const bounds = calculateBounds(tripData.stops);
     const mapInstance = initializeMap(bounds.getCenter());
     mapInstance.fitBounds(bounds);
 
@@ -59,16 +56,6 @@ export const BusRouteMap = ({
     });
   };
 
-  const calculateBounds = (): google.maps.LatLngBounds => {
-    const bounds = new google.maps.LatLngBounds();
-    tripData.stops.forEach((stop) => {
-      bounds.extend(
-        new google.maps.LatLng(stop.location.latitude, stop.location.longitude)
-      );
-    });
-    return bounds;
-  };
-
   const drawRoutePath = (
     mapInstance: google.maps.Map
   ): google.maps.Polyline => {
@@ -85,25 +72,6 @@ export const BusRouteMap = ({
 
     routePath.setMap(mapInstance);
     return routePath;
-  };
-
-  const createMarker = (
-    mapInstance: google.maps.Map,
-    config: MarkerConfig
-  ): google.maps.marker.AdvancedMarkerElement => {
-    const marker = new google.maps.marker.AdvancedMarkerElement({
-      position: config.position,
-      map: mapInstance,
-      title: config.title,
-      content: config.content,
-    });
-
-    if (config.onClick) {
-      marker.addListener('click', config.onClick);
-    }
-
-    markersRef.current.push(marker);
-    return marker;
   };
 
   const createStopMarkers = (mapInstance: google.maps.Map): void => {

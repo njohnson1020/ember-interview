@@ -1,6 +1,6 @@
 'use server';
 
-import { mapTripData, TripData } from '@/app/lib/transform-trip-info';
+import { mapTripData } from '@/app/lib/transform-trip-info';
 
 export const getBusRouteData = async (
   routeId: string

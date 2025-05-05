@@ -1,31 +1,7 @@
-import { BusStatusLabel } from '@/app/enums';
-import { getTimeDifferenceInMinutes, isValidDate } from '@/app/utils/date';
-
-export interface TripData {
-  title: string;
-  is_cancelled: boolean;
-  vehicle: Vehicle;
-  stops: RouteStop[];
-  path: GeoPoint[];
-}
-
-export interface BusStatus {
-  status: BusStatusLabel;
-  description: string;
-  color: string;
-}
-
-export interface RouteStop {
-  stopNumber: number;
-  name: string;
-  location: GeoPoint;
-  arrival: ScheduledTime;
-  departure: ScheduledTime;
-  busStatus: BusStatus;
-  allow_boarding: boolean;
-  allow_drop_off: boolean;
-  is_next_stop: boolean;
-}
+import {
+  getTimeDifferenceInMinutes,
+  isValidDate,
+} from '@/app/utils/date-utils';
 
 /**
  * Determines the bus status based on route point data
@@ -35,7 +11,7 @@ export interface RouteStop {
 const getBusStatus = (stop: RoutePoint): BusStatus => {
   if (stop.skipped) {
     return {
-      status: BusStatusLabel.PAST,
+      status: 'past',
       description: 'Skipped',
       color: '#808080',
     };
@@ -47,7 +23,7 @@ const getBusStatus = (stop: RoutePoint): BusStatus => {
     !isValidDate(stop.arrival.scheduled)
   ) {
     return {
-      status: BusStatusLabel.UNKNOWN,
+      status: 'unknown',
       description: 'TBD',
       color: '#808080',
     };
@@ -55,7 +31,7 @@ const getBusStatus = (stop: RoutePoint): BusStatus => {
 
   if (stop.arrival.actual) {
     return {
-      status: BusStatusLabel.PAST,
+      status: 'past',
       description: 'Past',
       color: '#808080',
     };
@@ -68,7 +44,7 @@ const getBusStatus = (stop: RoutePoint): BusStatus => {
 
   if (absTimeDiff <= 1) {
     return {
-      status: BusStatusLabel.ON_TIME,
+      status: 'on-time',
       description: 'On Time',
       color: '#4CAF50',
     };
@@ -76,12 +52,12 @@ const getBusStatus = (stop: RoutePoint): BusStatus => {
 
   return timeDiff > 0
     ? {
-        status: BusStatusLabel.EARLY,
+        status: 'early',
         description: `${absTimeDiff} minutes early`,
         color: '#2196F3',
       }
     : {
-        status: BusStatusLabel.DELAYED,
+        status: 'delayed',
         description: `${absTimeDiff} minutes late`,
         color: '#F44336',
       };

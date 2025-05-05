@@ -1,5 +1,4 @@
-import { BusStatus } from '@/app/lib/transform-trip-info';
-import { formatDate, formatTime } from '@/app/utils/date';
+import { formatDate, formatTime } from '@/app/utils/date-utils';
 
 export const TimeDisplay = ({
   title,

@@ -1,4 +1,3 @@
-import { RouteStop } from '@/app/lib/transform-trip-info';
 import { StatusLegend } from './status-legend';
 
 export const RouteInfo = ({
