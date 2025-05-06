@@ -71,7 +71,7 @@ describe('info-window-utils', () => {
     expect(content).toContain(
       `<strong>Next Stop:</strong> ${mockNextStop.name}`
     );
-    expect(content).toContain('Scheduled Arrival:');
+    expect(content).toContain('Estimated Arrival:');
     expect(content).toContain(`${mockNextStop.location.latitude.toFixed(5)}`);
   });
 
@@ -94,7 +94,7 @@ describe('info-window-utils', () => {
     expect(content).toContain(
       `${mockNextStopWithoutEstimate.location.latitude.toFixed(5)}`
     );
-    expect(content).not.toContain('Scheduled Arrival:');
+    expect(content).not.toContain('Estimated Arrival:');
   });
 
   it('shows trip complete when no next stop is provided', () => {
@@ -124,7 +124,7 @@ describe('info-window-utils', () => {
       },
     } as any;
     const content = createInfoWindowContent(mockGPS, stopWithNoSchedule);
-    expect(content).not.toContain('Scheduled Arrival:');
+    expect(content).not.toContain('Estimated Arrival:');
   });
 
   it('maintains consistent styling', () => {

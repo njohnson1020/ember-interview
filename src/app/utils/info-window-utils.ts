@@ -41,7 +41,7 @@ export const createInfoWindowContent = (
         <strong>Next Stop:</strong> ${nextStop.name}<br>
         ${
           arrivalTimeDiff
-            ? `<strong>Scheduled Arrival:</strong> ${Math.abs(
+            ? `<strong>Estimated Arrival:</strong> ${Math.abs(
                 arrivalTimeDiff
               )} min<br>`
             : ''
