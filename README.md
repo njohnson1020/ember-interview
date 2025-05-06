@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bus Route Tracking Application
 
-## Getting Started
+A Next.js application that displays bus route information and route status tracking using Google Maps integration.
 
-First, run the development server:
+## Features
+
+- Vehicle information display (plate number, type, amenities)
+- Interactive map visualization of bus location and route
+- Server-side rendering with Next.js
+
+## Prerequisites
+
+- Node.js 18 or later
+- Google Maps API key
+- npm package manager
+
+## Environment Setup
+
+Create a `.env.local` file in the root directory:
+
+```env
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+```
+
+## Installation
+
+```bash
+npm install
+```
+
+## Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application accepts a `routeId` query parameter to display specific bus route information:
 
-## Learn More
+- Example: `http://localhost:3000?routeId=123`
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/app/` - Main application code
+  - `actions/` - Server actions for data fetching
+  - `components/` - Reusable React components
+  - `hooks/` - Custom react hooks
+  - `lib/` - Domain logic
+  - `utils/` - Collection of utility functions
+  - `page.tsx` - Main route page component
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- [Next.js](https://nextjs.org/) - React framework
+- [Google Maps API](https://developers.google.com/maps) - Map visualization
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

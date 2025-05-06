@@ -1,5 +1,8 @@
 export const StatusLegend = () => (
-  <div className="mt-4 pt-4 border-t border-gray-200">
+  <div
+    data-testid="status-legend"
+    className="mt-4 pt-4 border-t border-gray-200"
+  >
     <h3 className="font-semibold mb-2">Status Legend:</h3>
     <div className="space-y-1">
       <div className="flex items-center">

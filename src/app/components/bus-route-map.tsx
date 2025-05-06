@@ -1,15 +1,16 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import {
-  formatTime,
-  getTimeDifferenceInMinutes,
-  now,
-} from '@/app/utils/date-utils';
 import { useGoogleMaps } from '@/app/hooks/google-maps-hook';
 import { RouteInfo } from './route-info';
 import { StopDetail } from './stop-detail';
-import { calculateBounds, createMarker } from '@/app/utils/map-utils';
+import {
+  calculateBounds,
+  createMarker,
+  drawRoutePath,
+  initializeMap,
+} from '@/app/utils/map-utils';
+import { createInfoWindowContent } from '../utils/info-window-utils';
 
 interface BusRouteMapProps {
   tripData: TripData;
@@ -29,12 +30,18 @@ export const BusRouteMap = ({
   useEffect(() => {
     if (!mapsLoaded || !tripData.stops.length) return;
     const bounds = calculateBounds(tripData.stops);
-    const mapInstance = initializeMap(bounds.getCenter());
+    const mapInstance = initializeMap('ember-map', bounds.getCenter());
     mapInstance.fitBounds(bounds);
 
     mapRef.current = mapInstance;
 
-    const routePath = drawRoutePath(mapInstance);
+    const path = tripData.path.map(
+      (point): google.maps.LatLngLiteral => ({
+        lat: point.latitude,
+        lng: point.longitude,
+      })
+    );
+    const routePath = drawRoutePath(mapInstance, path);
     routePathRef.current = routePath;
 
     createStopMarkers(mapInstance);
@@ -42,37 +49,6 @@ export const BusRouteMap = ({
 
     return cleanupMap;
   }, [mapsLoaded, tripData.stops]);
-
-  const initializeMap = (center: google.maps.LatLng): google.maps.Map => {
-    return new google.maps.Map(document.getElementById('map')!, {
-      center,
-      zoom: 13,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl: true,
-      streetViewControl: true,
-      zoomControl: true,
-      fullscreenControl: true,
-      mapId: 'ember-map',
-    });
-  };
-
-  const drawRoutePath = (
-    mapInstance: google.maps.Map
-  ): google.maps.Polyline => {
-    const routePath = new google.maps.Polyline({
-      path: tripData.path.map((point) => ({
-        lat: point.latitude,
-        lng: point.longitude,
-      })),
-      geodesic: true,
-      strokeColor: '#0088FF',
-      strokeOpacity: 0.8,
-      strokeWeight: 4,
-    });
-
-    routePath.setMap(mapInstance);
-    return routePath;
-  };
 
   const createStopMarkers = (mapInstance: google.maps.Map): void => {
     tripData.stops.forEach((stop) => {
@@ -169,72 +145,6 @@ export const BusRouteMap = ({
     vehiclePinElement.innerText = 'Bus';
 
     return vehiclePinElement;
-  };
-
-  const createInfoWindowContent = (
-    vehicleLocation: GPS,
-    nextStop?: RouteStop
-  ): string => {
-    const currentTime = now();
-    const lastUpdated = new Date(vehicleLocation.last_updated);
-    const lastUpdatedTimeDiff = getTimeDifferenceInMinutes(
-      currentTime,
-      lastUpdated
-    );
-    const isOutdated = Math.abs(lastUpdatedTimeDiff) >= 5;
-
-    const arrivalTimeDiff = nextStop
-      ? getTimeDifferenceInMinutes(
-          new Date(nextStop.arrival.scheduled),
-          new Date(vehicleLocation.last_updated)
-        )
-      : undefined;
-
-    return `
-      <div style="min-width: 200px; padding: 8px; color: black;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <strong style="font-size: 16px;">Bus #42</strong>
-          ${
-            isOutdated
-              ? `<span style="background-color: #ff6b6b; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;">
-              OUTDATED
-            </span>`
-              : `<span style="background-color: #4CAF50; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;">
-              LIVE
-            </span>`
-          }
-        </div>
-        <div style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px;">
-        ${
-          nextStop
-            ? `
-          <strong>Next Stop:</strong> ${nextStop.name}<br>
-          ${
-            arrivalTimeDiff
-              ? `<strong>Scheduled Arrival:</strong> ${arrivalTimeDiff} min<br>`
-              : ''
-          }
-          <strong>GPS:</strong> ${nextStop.location.latitude.toFixed(
-            5
-          )}, ${nextStop.location.longitude.toFixed(5)}
-        `
-            : '<strong>Trip Complete</strong>'
-        }
-        </div>
-        <div style="margin-top: 8px; font-size: 12px; color: ${
-          isOutdated ? '#ff6b6b' : '#777'
-        };">
-          Last updated: ${formatTime(
-            vehicleLocation.last_updated
-          )} (${lastUpdatedTimeDiff} min ago)
-          ${
-            isOutdated
-              ? '<div style="color: #ff6b6b; font-weight: bold; margin-top: 5px;">Please refresh for current location</div>'
-              : ''
-          }
-        </div>
-      </div>
-    `;
   };
 
   const cleanupMap = (): void => {

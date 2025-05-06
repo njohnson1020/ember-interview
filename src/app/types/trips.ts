@@ -8,7 +8,7 @@ interface RoutePoint {
   id: number;
   departure: ScheduledTime;
   arrival: ScheduledTime;
-  location: Location;
+  location: StopLocation;
   allow_boarding: boolean;
   allow_drop_off: boolean;
   booking_cut_off_mins: number;
@@ -22,7 +22,7 @@ interface ScheduledTime {
   actual?: string | undefined; // ISO 8601 date string
 }
 
-interface Location {
+interface StopLocation {
   id: number;
   type: 'STOP_POINT' | string;
   name: string;

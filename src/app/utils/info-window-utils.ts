@@ -40,7 +40,9 @@ export const createInfoWindowContent = (
         <strong>Next Stop:</strong> ${nextStop.name}<br>
         ${
           arrivalTimeDiff
-            ? `<strong>Scheduled Arrival:</strong> ${arrivalTimeDiff} min<br>`
+            ? `<strong>Scheduled Arrival:</strong> ${Math.abs(
+                arrivalTimeDiff
+              )} min<br>`
             : ''
         }
         <strong>GPS:</strong> ${nextStop.location.latitude.toFixed(
@@ -53,9 +55,9 @@ export const createInfoWindowContent = (
       <div style="margin-top: 8px; font-size: 12px; color: ${
         isOutdated ? '#ff6b6b' : '#777'
       };">
-        Last updated: ${formatTime(
-          vehicleLocation.last_updated
-        )} (${lastUpdatedTimeDiff} min ago)
+        Last updated: ${formatTime(vehicleLocation.last_updated)} (${Math.abs(
+    lastUpdatedTimeDiff
+  )} min ago)
         ${
           isOutdated
             ? '<div style="color: #ff6b6b; font-weight: bold; margin-top: 5px;">Please refresh for current location</div>'

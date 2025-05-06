@@ -1,15 +1,22 @@
 import { Suspense } from 'react';
-import { getBusRouteData } from './actions/bus-route';
+import { getBusRouteData } from './actions/fetch-bus-route';
 import { BusRouteMap } from './components/bus-route-map';
+
+type PageProps = {
+  params: Record<string, string>;
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export default async function BusRoutePage({
   searchParams,
 }: {
-  searchParams: { routeId: string };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { routeId } = await searchParams;
-  // Fetch data using server action
-  const tripData = await getBusRouteData(routeId);
+  const routeIdParam = (await searchParams).routeId;
+
+  const tripData = await getBusRouteData(
+    routeIdParam ? String(routeIdParam) : ''
+  );
 
   return (
     <div className="container mx-auto p-4">

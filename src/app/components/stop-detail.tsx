@@ -16,11 +16,6 @@ export const StopDetail = ({
         scheduleData={stop.arrival}
         busStatus={stop.busStatus}
       />
-      <TimeDisplay
-        title="Departure Times"
-        scheduleData={stop.departure}
-        busStatus={stop.busStatus}
-      />
 
       <div className="mt-3">
         <h3 className="font-semibold">Options:</h3>

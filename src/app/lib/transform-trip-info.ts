@@ -8,7 +8,7 @@ import {
  * @param stop - Route point information
  * @returns Bus status object
  */
-const getBusStatus = (stop: RoutePoint): BusStatus => {
+export const getBusStatus = (stop: RoutePoint): BusStatus => {
   if (stop.skipped) {
     return {
       status: 'past',

@@ -5,6 +5,38 @@ export interface MarkerConfig {
   onClick?: () => void;
 }
 
+export const initializeMap = (
+  mapId: string,
+  center: google.maps.LatLng
+): google.maps.Map => {
+  return new google.maps.Map(document.getElementById('map')!, {
+    center,
+    zoom: 13,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControl: true,
+    streetViewControl: true,
+    zoomControl: true,
+    fullscreenControl: true,
+    mapId,
+  });
+};
+
+export const drawRoutePath = (
+  mapInstance: google.maps.Map,
+  path: google.maps.LatLngLiteral[]
+): google.maps.Polyline => {
+  const routePath = new google.maps.Polyline({
+    path,
+    geodesic: true,
+    strokeColor: '#0088FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 4,
+  });
+
+  routePath.setMap(mapInstance);
+  return routePath;
+};
+
 export const calculateBounds = (
   stops: RouteStop[]
 ): google.maps.LatLngBounds => {
