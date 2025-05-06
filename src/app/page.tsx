@@ -12,10 +12,10 @@ export default async function BusRoutePage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const routeIdParam = (await searchParams).routeId;
+  const tripIdParam = (await searchParams).tripId;
 
   const tripData = await getBusRouteData(
-    routeIdParam ? String(routeIdParam) : ''
+    tripIdParam ? String(tripIdParam) : ''
   );
 
   return (

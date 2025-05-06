@@ -2,6 +2,8 @@
 
 A Next.js application that displays bus route information and route status tracking using Google Maps integration.
 
+The application is deployed with Vercel and can be viewed here: https://ember-interview.vercel.app/?tripId={your_trip_id}
+
 ## Features
 
 - Vehicle information display (plate number, type, amenities)
@@ -40,9 +42,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 
 ## Usage
 
-The application accepts a `routeId` query parameter to display specific bus route information:
+The application accepts a `tripId` query parameter to display specific bus route information:
 
-- Example: `http://localhost:3000?routeId=123`
+- Example: `http://localhost:3000?tripId=123`
 
 ## Project Structure
 

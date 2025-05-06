@@ -12,12 +12,13 @@ export const createInfoWindowContent = (
   );
   const isOutdated = Math.abs(lastUpdatedTimeDiff) >= 5;
 
-  const arrivalTimeDiff = nextStop
-    ? getTimeDifferenceInMinutes(
-        new Date(nextStop.arrival.scheduled),
-        new Date(vehicleLocation.last_updated)
-      )
-    : undefined;
+  const arrivalTimeDiff =
+    nextStop && nextStop.arrival.estimated
+      ? getTimeDifferenceInMinutes(
+          currentTime,
+          new Date(nextStop.arrival.estimated)
+        )
+      : undefined;
 
   return `
     <div style="min-width: 200px; padding: 8px; color: black;">

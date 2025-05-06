@@ -34,6 +34,7 @@ describe('info-window-utils', () => {
     },
     arrival: {
       scheduled: '2025-05-05T10:15:00Z',
+      estimated: '2025-05-05T10:16:00Z',
     },
     departure: {
       scheduled: '2025-05-05T10:20:00Z',
@@ -72,6 +73,28 @@ describe('info-window-utils', () => {
     );
     expect(content).toContain('Scheduled Arrival:');
     expect(content).toContain(`${mockNextStop.location.latitude.toFixed(5)}`);
+  });
+
+  it('does not display next stop information if no estimate', () => {
+    const mockNextStopWithoutEstimate = {
+      ...mockNextStop,
+      arrival: {
+        ...mockNextStop.arrival,
+        estimated: null,
+      },
+    } as any;
+
+    const content = createInfoWindowContent(
+      mockGPS,
+      mockNextStopWithoutEstimate
+    );
+    expect(content).toContain(
+      `<strong>Next Stop:</strong> ${mockNextStopWithoutEstimate.name}`
+    );
+    expect(content).toContain(
+      `${mockNextStopWithoutEstimate.location.latitude.toFixed(5)}`
+    );
+    expect(content).not.toContain('Scheduled Arrival:');
   });
 
   it('shows trip complete when no next stop is provided', () => {
